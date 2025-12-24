@@ -38,5 +38,8 @@ app.post("/api/users", (req, res) => {
   res.send(newUser);
 });
 
-const port = 8080;
-app.listen(port, () => console.log(` listening on port ${port}`));
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => {
+  console.log("Server running on port", port);
+});
