@@ -3,6 +3,7 @@ import express from "express";
 const app = express();
 
 app.use(express.static("dist"));
+app.use(express.json());
 
 const users = [
   { id: 1, name: "John Doe", age: 32 },
@@ -23,8 +24,18 @@ app.get("/api/users", (req, res) => {
     return;
   }
   setTimeout(() => {
-    res.send(users);
+    res.send([...users].reverse());
   }, 1000);
+});
+
+app.post("/api/users", (req, res) => {
+  const newUser = {
+    id: users.length + 1,
+    name: req.body.name,
+    age: req.body.age,
+  };
+  users.push(newUser);
+  res.send(newUser);
 });
 
 const port = 8080;
