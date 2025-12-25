@@ -38,6 +38,34 @@ app.post("/api/users", (req, res) => {
   res.send(newUser);
 });
 
+app.delete("/api/users/:id", (req, res) => {
+  const userId = Number(req.params.id);
+
+  const index = users.findIndex((user) => user.id === userId);
+  if (index === -1) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  users.splice(index, 1);
+  res.status(200).json({ message: "User deleted", id: userId });
+});
+
+app.put("/api/users/:id", (req, res) => {
+  const userId = Number(req.params.id);
+  const { name, age } = req.body;
+
+  const user = users.find((u) => u.id === userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // Update only what was sent
+  if (name !== undefined) user.name = name;
+  if (age !== undefined) user.age = age;
+
+  res.json({ message: "User updated", user });
+});
+
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
